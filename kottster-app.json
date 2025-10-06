@@ -585,14 +585,5 @@
         ]
       }
     ]
-  },
-  "menuPageOrder": [
-    "pricingPlans",
-    "addons",
-    "companyInfo",
-    "features",
-    "services",
-    "leads",
-    "onboardingQA"
-  ]
+  }
 }
