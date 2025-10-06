@@ -1,24 +1,5 @@
 {
-  "version": 2,
-  "buildCommand": "pnpm install && pnpm build",
+  "buildCommand": "pnpm build",
   "installCommand": "pnpm install",
-  "framework": null,
-  "outputDirectory": "dist/client",
-  "functions": {
-    "dist/server/server.cjs": {
-      "runtime": "nodejs20.x",
-      "memory": 1024,
-      "maxDuration": 30
-    }
-  },
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/dist/server/server.cjs"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/dist/server/server.cjs"
-    }
-  ]
+  "outputDirectory": "dist/client"
 }
