@@ -1,15 +1,7 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "dist/server/server.cjs",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "dist/server/server.cjs"
-    }
-  ]
+  "buildCommand": "pnpm build",
+  "installCommand": "pnpm install",
+  "devCommand": "pnpm dev",
+  "framework": null,
+  "outputDirectory": "dist/client"
 }

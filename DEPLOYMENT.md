@@ -1,178 +1,184 @@
-# Deploying Kottster Admin Panel to Vercel
+# Deploying Kottster Admin Panel
 
-This guide will help you deploy your Kottster admin panel to Vercel.
+**⚠️ Important:** Kottster requires a persistent Node.js server. Vercel's serverless architecture is not ideal for Kottster applications. Use Railway, Render, or DigitalOcean instead for best results.
 
-## Prerequisites
+## Recommended: Deploy to Railway
 
-1. A Vercel account (sign up at https://vercel.com)
-2. Vercel CLI installed: `npm i -g vercel`
-3. Your Neon PostgreSQL database connection string
-4. Admin credentials
+Railway is perfect for Kottster applications with zero configuration needed.
 
-## Step 1: Prepare Environment Variables
+### Quick Deploy to Railway
 
-Your admin panel needs the following environment variables:
+1. **Sign up** at https://railway.app
+2. **Create new project** → Deploy from GitHub repo
+3. **Select** `qkeluna/lunaxcode-admin-panel`
+4. **Add environment variables:**
+   ```
+   DATABASE_URL=your_neon_connection_string
+   ```
+5. Railway will auto-detect and deploy!
+
+Your app will be live at: `https://your-app.up.railway.app`
+
+---
+
+## Alternative: Deploy to Render
+
+Render offers free tier and is great for Node.js apps.
+
+### Deploy to Render
+
+1. **Sign up** at https://render.com
+2. **New** → Web Service
+3. **Connect** your GitHub repo: `qkeluna/lunaxcode-admin-panel`
+4. **Configure:**
+   - **Build Command:** `pnpm install && pnpm build`
+   - **Start Command:** `pnpm start`
+   - **Environment:** Node
+5. **Add environment variables** (same as above)
+6. **Create Web Service**
+
+---
+
+## Alternative: DigitalOcean App Platform
+
+### Deploy to DigitalOcean
+
+1. **Sign up** at https://www.digitalocean.com
+2. **Create App** → GitHub
+3. **Select repo:** `qkeluna/lunaxcode-admin-panel`
+4. **Configure:**
+   - **Type:** Web Service
+   - **Build Command:** `pnpm install && pnpm build`
+   - **Run Command:** `pnpm start`
+5. **Add environment variables**
+6. **Launch**
+
+---
+
+## Environment Variables (All Platforms)
+
+Add these environment variables to your deployment platform:
 
 ```env
-DATABASE_URL=your_neon_postgres_connection_string
-KOTTSTER_SECRET_KEY=your_secret_key
-KOTTSTER_API_TOKEN=your_api_token
-KOTTSTER_JWT_SECRET_SALT=your_jwt_salt
-ADMIN_USERNAME=admin
-ADMIN_PASSWORD=your_secure_password
+# Required
+DATABASE_URL=postgresql://neondb_owner:...@ep-noisy-unit...neon.tech/neondb?sslmode=require
+
+# Optional (will use defaults from app/_server/app.ts if not set)
+KOTTSTER_SECRET_KEY=x0yFcOk2uOM9paYsxUWutW7ekBUwjD56
+KOTTSTER_API_TOKEN=jgnVNZkN0tIV7X1KYhwR2pAE5QbaxpSa
+KOTTSTER_JWT_SECRET_SALT=U2rvjmvnhJnVpGUM
 ```
 
-**Important:** Generate new secure values for production:
-- `KOTTSTER_SECRET_KEY`: 32-character random string
-- `KOTTSTER_API_TOKEN`: 32-character random string
-- `KOTTSTER_JWT_SECRET_SALT`: 16-character random string
-- `ADMIN_PASSWORD`: Strong password
-
-You can generate secure random strings using:
+**⚠️ For production:** Generate new secure random values:
 ```bash
-openssl rand -hex 16  # For 32-character hex string
-openssl rand -hex 8   # For 16-character hex string
+openssl rand -hex 16  # For 32-char keys
+openssl rand -hex 8   # For 16-char salt
 ```
 
-## Step 2: Deploy to Vercel
+---
 
-### Option A: Deploy via Vercel CLI
+## Why Not Vercel?
 
-1. Login to Vercel:
-   ```bash
-   vercel login
-   ```
+Vercel is optimized for:
+- Static sites
+- Serverless functions
+- Edge computing
 
-2. Deploy the project:
-   ```bash
-   vercel
-   ```
+Kottster needs:
+- Persistent Node.js process
+- WebSocket support
+- Stateful connections
+- SQLite database (for identity provider)
 
-3. Follow the prompts:
-   - Set up and deploy: Yes
-   - Which scope: Select your account
-   - Link to existing project: No
-   - Project name: `lunaxcode-admin-panel` (or your choice)
-   - Directory: `./` (current directory)
-   - Override settings: No
+**Result:** Vercel's serverless architecture causes:
+- 404 errors on API endpoints
+- SQLite database lost between requests
+- Poor performance
 
-4. Add environment variables:
-   ```bash
-   vercel env add DATABASE_URL
-   vercel env add KOTTSTER_SECRET_KEY
-   vercel env add KOTTSTER_API_TOKEN
-   vercel env add KOTTSTER_JWT_SECRET_SALT
-   vercel env add ADMIN_USERNAME
-   vercel env add ADMIN_PASSWORD
-   ```
+**Solution:** Use Railway, Render, or DigitalOcean which run persistent Node.js servers.
 
-5. Deploy to production:
-   ```bash
-   vercel --prod
-   ```
+---
 
-### Option B: Deploy via Vercel Dashboard
+## Verifying Deployment
 
-1. Go to https://vercel.com/new
+After deployment on any platform:
 
-2. Import your Git repository (GitHub, GitLab, or Bitbucket)
-
-3. Configure the project:
-   - **Framework Preset:** Other
-   - **Build Command:** `pnpm install && pnpm build`
-   - **Output Directory:** `dist/client`
-   - **Install Command:** `pnpm install`
-
-4. Add Environment Variables in the dashboard:
-   - Go to Settings → Environment Variables
-   - Add all the variables listed above
-   - Make sure to add them for Production, Preview, and Development
-
-5. Click "Deploy"
-
-## Step 3: Verify Deployment
-
-1. Once deployed, Vercel will provide you with a URL like: `https://your-project.vercel.app`
-
-2. Visit the URL and login with your admin credentials
-
-3. Verify that:
-   - All pages load correctly
+1. Visit your deployment URL
+2. Login with credentials:
+   - **Username:** `admin`
+   - **Password:** `Ymerick102728`
+3. Verify:
+   - All model pages load
    - Database connections work
-   - CRUD operations function properly
+   - CRUD operations function
+
+---
 
 ## Troubleshooting
 
-### Build Errors
-
-If you encounter build errors:
-
-1. Check build logs in Vercel dashboard
-2. Ensure all dependencies are in `package.json`
-3. Verify Node.js version matches (`>=20`)
-
 ### Database Connection Issues
 
-If database connection fails:
+**Symptom:** "Connection refused" or "Database not found"
 
+**Solution:**
 1. Verify `DATABASE_URL` is correctly set
-2. Check Neon database is accessible from Vercel's IP ranges
-3. Ensure SSL mode is enabled in connection string: `?sslmode=require`
+2. Check Neon database is active
+3. Ensure SSL mode: `?sslmode=require`
 
-### SQLite Issues
+### Build Failures
 
-The app uses `better-sqlite3` for local identity provider. If you encounter issues:
+**Symptom:** "Module not found" or compilation errors
 
-1. The SQLite database (`app.db`) will be created in the serverless function
-2. Note: Vercel functions are stateless, so consider using an external authentication provider for production
+**Solution:**
+1. Ensure Node.js version ≥20
+2. Clear build cache and redeploy
+3. Check `package.json` dependencies
 
-### Environment Variables Not Working
+### SQLite Errors
 
-1. Go to Vercel Dashboard → Settings → Environment Variables
-2. Ensure variables are added for the correct environment (Production/Preview/Development)
-3. Redeploy after adding/changing environment variables
+**Symptom:** "better-sqlite3" errors
 
-## Security Recommendations
+**Solution:**
+- The identity provider uses SQLite for user management
+- Most platforms handle this automatically
+- If issues persist, the database will be recreated on startup
 
-1. **Never commit** `.env` files to Git
-2. **Rotate secrets** regularly
-3. **Use strong passwords** for admin accounts
-4. **Enable 2FA** on your Vercel account
-5. **Restrict database access** to only necessary IP ranges
-
-## Updating Your Deployment
-
-To update your deployment:
-
-```bash
-# Make your changes
-git add .
-git commit -m "Your changes"
-git push
-
-# Vercel will automatically deploy
-# Or manually deploy:
-vercel --prod
-```
+---
 
 ## Custom Domain
 
-To add a custom domain:
+All platforms support custom domains:
 
-1. Go to Vercel Dashboard → Settings → Domains
-2. Add your domain
-3. Update DNS records as instructed
-4. Wait for DNS propagation (up to 48 hours)
+**Railway:**
+- Settings → Domains → Add Custom Domain
 
-## Performance Tips
+**Render:**
+- Settings → Custom Domains → Add
 
-1. **Enable caching** for static assets
-2. **Use connection pooling** for database (Neon provides this)
-3. **Monitor function execution time** in Vercel dashboard
-4. **Consider Edge Functions** for faster response times
+**DigitalOcean:**
+- Settings → Domains → Add Domain
+
+---
+
+## Recommended: Railway
+
+**Why Railway?**
+- ✅ Zero configuration
+- ✅ Auto-detects Node.js
+- ✅ Free tier available
+- ✅ Built-in PostgreSQL if needed
+- ✅ Automatic HTTPS
+- ✅ Easy rollbacks
+
+**Perfect for Kottster applications!**
+
+Deploy now: https://railway.app
+
+---
 
 ## Support
 
-- Kottster Documentation: https://kottster.app/docs/
-- Vercel Documentation: https://vercel.com/docs
-- Neon Documentation: https://neon.tech/docs
+- **Kottster:** https://kottster.app/docs/
+- **Railway:** https://docs.railway.app
+- **Render:** https://render.com/docs
+- **Neon:** https://neon.tech/docs
