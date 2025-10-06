@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "type": "table",
+  "title": "Onboarding QA",
+  "hideInSidebar": false,
+  "config": {
+    "dataSource": "postgres_db_7xd7fn",
+    "fetchStrategy": "databaseTable",
+    "table": "onboarding_questions"
+  }
+}

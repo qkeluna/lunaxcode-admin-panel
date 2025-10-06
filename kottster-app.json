@@ -1,0 +1,598 @@
+{
+  "id": "44031c62-a8ff-4306-995a-e0b863000c8a",
+  "meta": {
+    "name": "Admin Panel",
+    "icon": "https://web.kottster.app/icon.png"
+  },
+  "dataSources": {
+    "neon": {
+      "type": "knex-pg",
+      "connection": "_server/data-sources/neon"
+    }
+  },
+  "models": {
+    "services": {
+      "dataSource": "postgres_db_7xd7fn",
+      "table": "services",
+      "fields": {
+        "id": {
+          "type": "string",
+          "primaryKey": true
+        },
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "description": {
+          "type": "string",
+          "required": true
+        },
+        "details": {
+          "type": "text",
+          "required": true
+        },
+        "icon": {
+          "type": "string",
+          "required": true
+        },
+        "timeline": {
+          "type": "string",
+          "required": true
+        },
+        "created_at": {
+          "type": "datetime",
+          "readonly": true
+        },
+        "updated_at": {
+          "type": "datetime",
+          "readonly": true
+        }
+      },
+      "displayName": "Services",
+      "icon": "briefcase",
+      "listDisplay": [
+        "name",
+        "description",
+        "timeline",
+        "created_at"
+      ],
+      "searchFields": [
+        "name",
+        "description"
+      ]
+    },
+    "pricing_plans": {
+      "dataSource": "postgres_db_7xd7fn",
+      "table": "pricing_plans",
+      "fields": {
+        "id": {
+          "type": "string",
+          "primaryKey": true
+        },
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "price": {
+          "type": "number",
+          "required": true
+        },
+        "currency": {
+          "type": "string",
+          "required": true
+        },
+        "timeline": {
+          "type": "string",
+          "required": true
+        },
+        "features": {
+          "type": "json",
+          "required": true
+        },
+        "popular": {
+          "type": "boolean",
+          "default": false
+        },
+        "created_at": {
+          "type": "datetime",
+          "readonly": true
+        },
+        "updated_at": {
+          "type": "datetime",
+          "readonly": true
+        }
+      },
+      "displayName": "Pricing Plans",
+      "icon": "dollar-sign",
+      "listDisplay": [
+        "name",
+        "price",
+        "currency",
+        "timeline",
+        "popular"
+      ],
+      "searchFields": [
+        "name"
+      ]
+    },
+    "addons": {
+      "dataSource": "postgres_db_7xd7fn",
+      "table": "addons",
+      "fields": {
+        "id": {
+          "type": "number",
+          "primaryKey": true,
+          "autoIncrement": true
+        },
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "price_range": {
+          "type": "string",
+          "required": true
+        },
+        "currency": {
+          "type": "string",
+          "required": true
+        },
+        "unit": {
+          "type": "string",
+          "required": true
+        },
+        "created_at": {
+          "type": "datetime",
+          "readonly": true
+        },
+        "updated_at": {
+          "type": "datetime",
+          "readonly": true
+        }
+      },
+      "displayName": "Add-ons",
+      "icon": "plus-circle",
+      "listDisplay": [
+        "name",
+        "price_range",
+        "currency",
+        "unit"
+      ],
+      "searchFields": [
+        "name"
+      ]
+    },
+    "features": {
+      "dataSource": "postgres_db_7xd7fn",
+      "table": "features",
+      "fields": {
+        "id": {
+          "type": "number",
+          "primaryKey": true,
+          "autoIncrement": true
+        },
+        "icon": {
+          "type": "string",
+          "required": true
+        },
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "description": {
+          "type": "text",
+          "required": true
+        },
+        "display_order": {
+          "type": "number"
+        },
+        "created_at": {
+          "type": "datetime",
+          "readonly": true
+        },
+        "updated_at": {
+          "type": "datetime",
+          "readonly": true
+        }
+      },
+      "displayName": "Features",
+      "icon": "star",
+      "listDisplay": [
+        "title",
+        "display_order",
+        "created_at"
+      ],
+      "searchFields": [
+        "title",
+        "description"
+      ],
+      "ordering": [
+        "display_order"
+      ]
+    },
+    "leads": {
+      "dataSource": "postgres_db_7xd7fn",
+      "table": "leads",
+      "fields": {
+        "id": {
+          "type": "number",
+          "primaryKey": true,
+          "autoIncrement": true
+        },
+        "service_type": {
+          "type": "string",
+          "required": true
+        },
+        "full_name": {
+          "type": "string",
+          "required": true
+        },
+        "email": {
+          "type": "string",
+          "required": true
+        },
+        "phone": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "project_description": {
+          "type": "text"
+        },
+        "answers": {
+          "type": "json",
+          "required": true
+        },
+        "ai_prompt": {
+          "type": "text",
+          "required": true
+        },
+        "status": {
+          "type": "string",
+          "choices": [
+            "new",
+            "contacted",
+            "qualified",
+            "converted",
+            "lost"
+          ]
+        },
+        "created_at": {
+          "type": "datetime",
+          "readonly": true
+        },
+        "updated_at": {
+          "type": "datetime",
+          "readonly": true
+        }
+      },
+      "displayName": "Leads",
+      "icon": "users",
+      "listDisplay": [
+        "full_name",
+        "email",
+        "service_type",
+        "status",
+        "created_at"
+      ],
+      "searchFields": [
+        "full_name",
+        "email",
+        "company"
+      ],
+      "filters": [
+        "service_type",
+        "status"
+      ]
+    },
+    "contact_submissions": {
+      "dataSource": "postgres_db_7xd7fn",
+      "table": "contact_submissions",
+      "fields": {
+        "id": {
+          "type": "string",
+          "primaryKey": true
+        },
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "email": {
+          "type": "string",
+          "required": true
+        },
+        "subject": {
+          "type": "string"
+        },
+        "message": {
+          "type": "text",
+          "required": true
+        },
+        "status": {
+          "type": "string",
+          "choices": [
+            "new",
+            "read",
+            "replied",
+            "archived"
+          ],
+          "default": "new"
+        },
+        "replied_at": {
+          "type": "datetime"
+        },
+        "created_at": {
+          "type": "datetime",
+          "readonly": true
+        },
+        "submission_metadata": {
+          "type": "json"
+        }
+      },
+      "displayName": "Contact Submissions",
+      "icon": "mail",
+      "listDisplay": [
+        "name",
+        "email",
+        "subject",
+        "status",
+        "created_at"
+      ],
+      "searchFields": [
+        "name",
+        "email",
+        "subject",
+        "message"
+      ],
+      "filters": [
+        "status"
+      ],
+      "ordering": [
+        "-created_at"
+      ]
+    },
+    "onboarding_submissions": {
+      "dataSource": "postgres_db_7xd7fn",
+      "table": "onboarding_submissions",
+      "fields": {
+        "id": {
+          "type": "string",
+          "primaryKey": true
+        },
+        "service_type": {
+          "type": "string",
+          "required": true
+        },
+        "customer_email": {
+          "type": "string",
+          "required": true
+        },
+        "customer_name": {
+          "type": "string",
+          "required": true
+        },
+        "customer_company": {
+          "type": "string"
+        },
+        "customer_phone": {
+          "type": "string"
+        },
+        "answers": {
+          "type": "json",
+          "required": true
+        },
+        "status": {
+          "type": "string",
+          "choices": [
+            "pending",
+            "in_progress",
+            "completed",
+            "cancelled"
+          ],
+          "default": "pending"
+        },
+        "payment_status": {
+          "type": "string",
+          "choices": [
+            "unpaid",
+            "paid",
+            "refunded"
+          ],
+          "default": "unpaid"
+        },
+        "payment_intent_id": {
+          "type": "string"
+        },
+        "payment_url": {
+          "type": "text"
+        },
+        "created_at": {
+          "type": "datetime",
+          "readonly": true
+        },
+        "updated_at": {
+          "type": "datetime",
+          "readonly": true
+        },
+        "submission_metadata": {
+          "type": "json"
+        }
+      },
+      "displayName": "Onboarding Submissions",
+      "icon": "clipboard-check",
+      "listDisplay": [
+        "customer_name",
+        "customer_email",
+        "service_type",
+        "status",
+        "payment_status",
+        "created_at"
+      ],
+      "searchFields": [
+        "customer_name",
+        "customer_email",
+        "customer_company"
+      ],
+      "filters": [
+        "service_type",
+        "status",
+        "payment_status"
+      ],
+      "ordering": [
+        "-created_at"
+      ]
+    },
+    "onboarding_questions": {
+      "dataSource": "postgres_db_7xd7fn",
+      "table": "onboarding_questions",
+      "fields": {
+        "id": {
+          "type": "number",
+          "primaryKey": true,
+          "autoIncrement": true
+        },
+        "service_type": {
+          "type": "string",
+          "required": true
+        },
+        "title": {
+          "type": "string",
+          "required": true
+        },
+        "questions": {
+          "type": "json",
+          "required": true
+        },
+        "created_at": {
+          "type": "datetime",
+          "readonly": true
+        },
+        "updated_at": {
+          "type": "datetime",
+          "readonly": true
+        }
+      },
+      "displayName": "Onboarding Questions",
+      "icon": "help-circle",
+      "listDisplay": [
+        "service_type",
+        "title",
+        "updated_at"
+      ],
+      "searchFields": [
+        "service_type",
+        "title"
+      ]
+    },
+    "company_info": {
+      "dataSource": "postgres_db_7xd7fn",
+      "table": "company_info",
+      "fields": {
+        "id": {
+          "type": "number",
+          "primaryKey": true,
+          "autoIncrement": true
+        },
+        "name": {
+          "type": "string",
+          "required": true
+        },
+        "tagline": {
+          "type": "string",
+          "required": true
+        },
+        "description": {
+          "type": "text",
+          "required": true
+        },
+        "contact": {
+          "type": "json",
+          "required": true
+        },
+        "payment_terms": {
+          "type": "json",
+          "required": true
+        },
+        "updated_at": {
+          "type": "datetime",
+          "readonly": true
+        }
+      },
+      "displayName": "Company Info",
+      "icon": "building",
+      "listDisplay": [
+        "name",
+        "tagline",
+        "updated_at"
+      ],
+      "searchFields": [
+        "name",
+        "tagline"
+      ]
+    }
+  },
+  "navigation": {
+    "sections": [
+      {
+        "label": "Business",
+        "items": [
+          {
+            "model": "leads",
+            "label": "Leads"
+          },
+          {
+            "model": "contact_submissions",
+            "label": "Contact Messages"
+          },
+          {
+            "model": "onboarding_submissions",
+            "label": "Onboarding"
+          }
+        ]
+      },
+      {
+        "label": "Content",
+        "items": [
+          {
+            "model": "services",
+            "label": "Services"
+          },
+          {
+            "model": "pricing_plans",
+            "label": "Pricing"
+          },
+          {
+            "model": "addons",
+            "label": "Add-ons"
+          },
+          {
+            "model": "features",
+            "label": "Features"
+          }
+        ]
+      },
+      {
+        "label": "Configuration",
+        "items": [
+          {
+            "model": "onboarding_questions",
+            "label": "Questions"
+          },
+          {
+            "model": "company_info",
+            "label": "Company Info"
+          }
+        ]
+      }
+    ]
+  },
+  "menuPageOrder": [
+    "pricingPlans",
+    "addons",
+    "companyInfo",
+    "features",
+    "services",
+    "leads",
+    "onboardingQA"
+  ]
+}
